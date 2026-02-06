@@ -19,11 +19,21 @@ export default function Dashboard() {
   
   const { uploadData, result, loading, error } = useFileUpload();
 
-  const handleProcess = () => {
-    if (file && featureCol && targetCol) {
-      uploadData(file, featureCol, targetCol);
-    }
-  };
+  const [statusMessage, setStatusMessage] = useState("");
+
+const handleProcess = async () => {
+  if (file && featureCol && targetCol) {
+    setStatusMessage("Waking up AI Engine... (This may take 30 seconds on first run)");
+    await uploadData(file, featureCol, targetCol);
+    setStatusMessage("");
+  }
+};
+
+{loading && (
+  <p className="text-xs text-blue-500 animate-pulse mt-2 text-center font-medium">
+    {statusMessage}
+  </p>
+)}
 
   return (
     <div className="container mx-auto py-12 px-4 max-w-5xl space-y-12">
